@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const InitialState:UpdatedStudentProps={
     Student:null,
-    StudentAuth:false
+    Auth:false
 }
 const StudentSlice=createSlice({
     name:'student',
@@ -11,7 +11,7 @@ const StudentSlice=createSlice({
     reducers:{
         SetInitialStudentState:(state:UpdatedStudentProps,action:PayloadAction<UpdatedStudentProps>)=>{
             state.Student=action.payload.Student
-            state.StudentAuth=action.payload.StudentAuth
+            state.Auth=action.payload.Auth
         }
     }
 })

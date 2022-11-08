@@ -7,15 +7,19 @@ import 'react-app-polyfill/stable'
 import 'core-js'
 import "@coreui/coreui/dist/css/coreui.css"
 import "antd/dist/antd.min.css"
-
+import Store from './Redux/store';
+import { Provider } from 'react-redux';
 
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  
-      <App />
+  <Provider store={Store}>
+
+    <App />
+
+  </Provider>
     
 );
 

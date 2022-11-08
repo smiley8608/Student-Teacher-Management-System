@@ -8,7 +8,7 @@ interface TeacherProps {
 
 interface UpdatedTeacherProps {
     Teacher: TeacherProps | null,
-    TeacherAuth: boolean
+    Auth: boolean
 }
 
 interface StudentProps {
@@ -22,5 +22,5 @@ interface StudentProps {
 }
 interface UpdatedStudentProps {
     Student:StudentProps|null,
-    StudentAuth:boolean
+    Auth:boolean
 }

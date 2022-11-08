@@ -3,7 +3,7 @@ import {createSlice, PayloadAction} from '@reduxjs/toolkit'
 
 const InitialState:UpdatedTeacherProps={
     Teacher:null,
-    TeacherAuth:false
+    Auth:false
 }
 
 const TeacherSlice=createSlice({
@@ -12,7 +12,7 @@ const TeacherSlice=createSlice({
     reducers:{
         SetInitialState:(state:UpdatedTeacherProps,action:PayloadAction<UpdatedTeacherProps>)=>{
             state.Teacher=action.payload.Teacher
-            state.TeacherAuth=action.payload.TeacherAuth
+            state.Auth=action.payload.Auth
 
         }
     }
