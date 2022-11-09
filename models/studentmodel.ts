@@ -1,6 +1,6 @@
 
 import { string } from "joi";
-import mongoose from "mongoose";
+import mongoose, { Mongoose } from "mongoose";
 
 const StudentScheme=new mongoose.Schema({
     studentname:{
@@ -9,13 +9,17 @@ const StudentScheme=new mongoose.Schema({
     },rollno:{
         type:String,
         require:true
-    },course:{
+    },courses:{
+        type:mongoose.Types.ObjectId,
+        require:true,
+        ref:'courses'
+    },dob:{
         type:String,
         require:true
-    },department:{
+    },path:{
         type:String,
         require:true
-    },studentPhoto:{
+    },password:{
         type:String,
         require:true
     }

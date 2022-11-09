@@ -17,7 +17,7 @@ export interface StudentProps {
     rollno:string,
     course:string,
     department:string,
-    dob:Date
+    dob:string
 }
 
 export interface UpdatedStudentProps extends express.Request {
