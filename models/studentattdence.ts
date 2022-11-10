@@ -19,10 +19,12 @@ const attendenceSchema=new mongoose.Schema({
         require:true
     },student_id:{
         type:mongoose.Types.ObjectId,
-        require:true
+        require:true,
+        ref:'students'
     },courses:{
         type:mongoose.Types.ObjectId,
-        require:true
+        require:true,
+        ref:'courses'
     }
 })
 

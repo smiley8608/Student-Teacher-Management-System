@@ -4,6 +4,7 @@ import mongoose from 'mongoose'
 import bodyParser=require('body-parser')
 import cors from 'cors'
 import TeacherRouter from './router/teacherRouter'
+import StudentRouter from './router/studentrouter'
 
 const app = express()
 app.use(express.json())
@@ -14,6 +15,7 @@ app.use(cors({
     credentials:true
 }))
 app.use('/',TeacherRouter)
+app.use('/student',StudentRouter)
 mongoose.connect('mongodb://localhost:27017/ims', (err) => {
     if (err) {
         console.log(err);

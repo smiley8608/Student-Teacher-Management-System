@@ -8,6 +8,7 @@ import { UpdatedStudentProps } from '../type'
 import StudentModel from '../models/studentmodel'
 import multer = require('multer')
 import { CoursModel } from '../models/course'
+import { AttendenceModel } from '../models/studentattdence'
 
 
 dotenv.config()
@@ -15,13 +16,18 @@ dotenv.config()
 const studentSchema = Joi.object({
     studentname: Joi.string().max(40).trim().required(),
     rollno: Joi.string().alphanum().max(10).required(),
-    course: Joi.string().required(),
-    dob: Joi.date().required()
+    courses: Joi.string().required(),
+    dob: Joi.string().required()
 })
 
-export const StudentRegister = (req: UpdatedStudentProps, res: express.Response) => {
-    const { studentname, rollno, course, dob } = req.body
-    studentSchema.validateAsync({ studentname, rollno, course, dob })
+export const StudentRegister = (req: express.Request, res: express.Response) => {
+    const { studentname, rollno, courses, dob } = req.body
+    const date = new Date()
+    const month = date.getMonth() + 1
+    const year = date.getFullYear()
+    // console.log("req.body"+req.body);
+
+    studentSchema.validateAsync({ studentname, rollno, courses, dob })
         .then(validate => {
             StudentModel.find({ rollno: rollno })
                 .then(rollnoarray => {
@@ -32,16 +38,25 @@ export const StudentRegister = (req: UpdatedStudentProps, res: express.Response)
                             .then(hassedpass => {
 
                                 if (hassedpass) {
-                                    StudentModel.create({ studentname, course, rollno, dob: dob, password: hassedpass, path: req.file?.path })
-                                        .then(result => {
-                                            console.log("result" + result);
 
-                                            if (result) {
-                                                if (process.env.STD_SECURT) {
-                                                    let token = Jwt.sign({ _id: result.id }, process.env.STD_SECURT)
-                                                    return res.json({ message: 'Student Account created!', Student: result, Auth: true, tkn: token })
-                                                }
-                                            }
+                                    StudentModel.create({ studentname, courses, rollno, dob: dob, password: hassedpass, path: req.file?.path })
+                                        .then(result => {
+                                            AttendenceModel.create({ studentname: result.studentname, student_id: result._id, courses: result.courses, rollno: result.rollno, attendence: [], month: month, year: year })
+                                                .then(finalresult => {
+                                                    console.log("result" + result);
+                                                    console.log("finalresult" + finalresult);
+
+                                                    if (result && finalresult) {
+                                                        return res.json({ message: 'Student Account created!', Student: result, Auth: true })
+                                                    } else {
+                                                        return res.json({ message: 'unable to create student account' })
+                                                    }
+                                                })
+                                                .catch(err => {
+                                                    console.log(err);
+
+                                                })
+
                                         })
                                         .catch(err => {
                                             return res.json({ message: err })
@@ -63,7 +78,7 @@ export const StudentList = (req: express.Request, res: express.Response) => {
     const id = req.body.id
     console.log(id);
     StudentModel.find({ courses: id })
-        .populate({path:"courses", select:"department course"})
+        .populate({ path: "courses", select: "department course" })
         .then(studentarray => {
             // console.log(studentarray);
 
@@ -72,8 +87,9 @@ export const StudentList = (req: express.Request, res: express.Response) => {
                 return res.json({ Student: studentarray })
             }
         })
-        .catch(err => {console.log(err)
-        
+        .catch(err => {
+            console.log(err)
+
             return res.json({ message: err })
         })
 
@@ -100,4 +116,46 @@ export const StudentList = (req: express.Request, res: express.Response) => {
     // }).catch(err=>{
     //     return res.json({message:err})
     // })
+}
+const studentloginschema = Joi.object({
+    rollno: Joi.string().required(),
+    password: Joi.string().required()
+})
+export const StudentLogin = (req: express.Request, res: express.Response) => {
+    const { rollno, password } = req.body.data
+    studentloginschema.validateAsync({ rollno, password })
+        .then(validate => {
+            StudentModel.findOne({ rollno: rollno })
+                .then(studentobject => {
+                    if (!studentobject) {
+                        return res.json({ message: 'Please enter the valid input!' })
+                    } else {
+                        bcrypt.compare(password, studentobject.password as string)
+                            .then(compPwd => {
+                                if (!compPwd) {
+                                    return res.json({ message: 'please check the password' })
+                                } else {
+                                    if (process.env.STD_SECURT) {
+                                        let token = Jwt.sign('student-token', process.env.STD_SECURT)
+                                        return res.json({ message: 'Account Login Successfully!', Student: studentobject, Auth: true, tkn: token })
+                                    }
+                                }
+                            })
+                            .catch(err => {
+                                return res.json({ message: err })
+                            })
+                    }
+                })
+                .catch(err => {
+                    return res.json({ message: err })
+                })
+        }).catch(err => {
+            return res.json({ message: err })
+        })
+
+
+}
+
+export const StudentAuth=(req:UpdatedStudentProps,res:express.Response)=>{
+    return res.json({Student:req.Student,Auth:true})
 }

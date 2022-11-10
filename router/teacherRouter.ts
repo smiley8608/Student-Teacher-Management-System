@@ -5,6 +5,7 @@ import * as TeacherControll from '../controllers/teacherAuth'
 import { UpdatedRouter } from '../type'
 import { AddCourse, GetCourse } from '../controllers/course'
 import * as StudentControll from '../controllers/studentAuth'
+import * as AttendenceControll from '../controllers/attendence'
 import multer = require('multer')
 import path from 'path'
 const TeacherRouter: UpdatedRouter = express.Router()
@@ -26,5 +27,6 @@ TeacherRouter.post('/courseadd', Middlewere, AddCourse)
 TeacherRouter.get('/getcourse', Middlewere, GetCourse)
 TeacherRouter.post('/studentadd', Middlewere, upload.single('studentphoto'),StudentControll.StudentRegister)
 TeacherRouter.post('/studentlist',Middlewere,StudentControll.StudentList)
-
+TeacherRouter.post('/getattendence',Middlewere,AttendenceControll.GetAttandence)
+TeacherRouter.post('/updateattendence',Middlewere,AttendenceControll.UpdateAttendence)
 export default TeacherRouter 
