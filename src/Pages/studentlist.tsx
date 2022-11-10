@@ -72,6 +72,7 @@ const StudentList = () => {
                         
                         onChange={studenthandler}
                       >
+                        <option>select course</option>
                         {courselist.map((list) => {
                           return (
                             <option value={list._id} className="tw-text-sm tw-font-medium tw-text-gray-900 tw-px-6 tw-py-4 tw-text-left">
@@ -108,6 +109,10 @@ const StudentList = () => {
                       </td>
                       <td className="tw-text-sm tw-text-gray-900 tw-font-light tw-px-6 tw-py-4 tw-whitespace-nowrap">
                         {list.dob}
+                      </td>
+                      <td className="tw-text-sm tw-text-gray-900 tw-font-light tw-px-6 tw-py-4 tw-whitespace-nowrap">
+                        <button>Edit</button>
+                        <button>Delete</button>
                       </td>
                     </tr>
                   );

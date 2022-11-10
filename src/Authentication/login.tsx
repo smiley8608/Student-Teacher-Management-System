@@ -1,6 +1,7 @@
 import { message } from "antd";
 import axios from "axios";
 import { FormEvent, useState } from "react";
+import { Link } from "react-router-dom";
 import { useAppDispatch } from "../Redux/hook";
 import { SetInitialState } from "../Redux/teacherslice";
 
@@ -50,10 +51,11 @@ const LogIn = () => {
               }}
             />
           </div>
-          <div className="tw-flex tw-justify-end">
+          <div className="tw-flex tw-justify-between">
             <button className="tw-bg-red-400 tw-p-3 tw-mt-2 tw-rounded-lg">
               Submit
             </button>
+            <Link to='/studentlogin' className="tw-font-outfit tw-text-lg tw-mt-5" >StudentLogin..</Link>
           </div>
         </form>
       </div>

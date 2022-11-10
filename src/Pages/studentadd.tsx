@@ -9,7 +9,7 @@ const StudentAdd = () => {
     rollno: "",
     dob: "",
     studentphoto: "" as any,
-    course: "",
+    courses: "",
     subject: "",
   });
   const form = new FormData();
@@ -27,7 +27,7 @@ const StudentAdd = () => {
   form.append("studentphoto", data.studentphoto);
   form.append("studentname", data.studentname);
   form.append("rollno", data.rollno);
-  form.append("course", data.course);
+  form.append("courses", data.courses);
   form.append("subject", data.subject);
   form.append('dob',data.dob)
   const submithandler = (e: FormEvent) => {
@@ -93,11 +93,12 @@ const StudentAdd = () => {
             <label className="tw-font-outfit tw-text-lg">Course</label>
             <br />
             <select
-              value={data.course}
+              value={data.courses}
               onChange={(e: any) => {
-                setData({ ...data, course: e.target.value });
+                setData({ ...data, courses: e.target.value });
               }}
             >
+              <option>select course</option>
               {courselist.map((list) => {
                 return (
                   <option
