@@ -8,5 +8,7 @@ const StudentRouter:UpdatedRouter=express.Router()
 
 StudentRouter.post("/studentlogin",StudentMiddlewere,StudentControll.StudentLogin)
 StudentRouter.get("/studentauth",StudentMiddlewere,StudentControll.StudentAuth)
+StudentRouter.get('/studentdetails',StudentMiddlewere,StudentControll.StudentDetails)
+StudentRouter.get('/studentattendence',StudentMiddlewere,StudentControll.StudentAttdence)
 
 export default StudentRouter

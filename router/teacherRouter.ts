@@ -29,4 +29,5 @@ TeacherRouter.post('/studentadd', Middlewere, upload.single('studentphoto'),Stud
 TeacherRouter.post('/studentlist',Middlewere,StudentControll.StudentList)
 TeacherRouter.post('/getattendence',Middlewere,AttendenceControll.GetAttandence)
 TeacherRouter.post('/updateattendence',Middlewere,AttendenceControll.UpdateAttendence)
+TeacherRouter.get('/editstudent/:_id',Middlewere,StudentControll.EditStudent)
 export default TeacherRouter 

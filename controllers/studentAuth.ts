@@ -4,7 +4,7 @@ import Joi from 'joi'
 import bcrypt = require('bcrypt')
 import Jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
-import { UpdatedStudentProps } from '../type'
+import { AttendenceProps, UpdatedAttendenceProps, UpdatedStudentProps } from '../type'
 import StudentModel from '../models/studentmodel'
 import multer = require('multer')
 import { CoursModel } from '../models/course'
@@ -20,7 +20,7 @@ const studentSchema = Joi.object({
     dob: Joi.string().required()
 })
 
-export const StudentRegister = (req: express.Request, res: express.Response) => {
+export const StudentRegister = (req:UpdatedStudentProps, res: express.Response) => {
     const { studentname, rollno, courses, dob } = req.body
     const date = new Date()
     const month = date.getMonth() + 1
@@ -45,12 +45,16 @@ export const StudentRegister = (req: express.Request, res: express.Response) => 
                                                 .then(finalresult => {
                                                     console.log("result" + result);
                                                     console.log("finalresult" + finalresult);
-
-                                                    if (result && finalresult) {
-                                                        return res.json({ message: 'Student Account created!', Student: result, Auth: true })
-                                                    } else {
-                                                        return res.json({ message: 'unable to create student account' })
+                                                    if (process.env.STD_SECURT) {
+                                                        let Token = Jwt.sign({_id:result._id}, process.env.STD_SECURT)
+                                                        if (result && finalresult) {
+                                                            return res.json({ message: 'Student Account created!', Student: result, Auth: true,tkn:Token })
+                                                        } else {
+                                                            return res.json({ message: 'unable to create student account' })
+                                                        }
                                                     }
+
+
                                                 })
                                                 .catch(err => {
                                                     console.log(err);
@@ -136,7 +140,7 @@ export const StudentLogin = (req: express.Request, res: express.Response) => {
                                     return res.json({ message: 'please check the password' })
                                 } else {
                                     if (process.env.STD_SECURT) {
-                                        let token = Jwt.sign('student-token', process.env.STD_SECURT)
+                                        let token = Jwt.sign({_id:studentobject._id}, process.env.STD_SECURT)
                                         return res.json({ message: 'Account Login Successfully!', Student: studentobject, Auth: true, tkn: token })
                                     }
                                 }
@@ -156,6 +160,55 @@ export const StudentLogin = (req: express.Request, res: express.Response) => {
 
 }
 
-export const StudentAuth=(req:UpdatedStudentProps,res:express.Response)=>{
-    return res.json({Student:req.Student,Auth:true})
+export const StudentAuth = (req: UpdatedStudentProps, res: express.Response) => {
+    console.log(req.Student);
+
+    return res.json({ Student: req.Student, Auth: true })
+}
+export const StudentDetails=(req:UpdatedStudentProps,res:express.Response)=>{
+    StudentModel.findById({_id:req.Student._id}).populate({path:'courses',select:'course department'})
+    .then(responce=>{
+        
+        if(responce){
+            return res.json({Student:responce})
+        }
+        
+    }).catch(err=>{
+        return res.json({message:err})
+    })
+}
+
+export const StudentAttdence=(req:UpdatedAttendenceProps,res:express.Response)=>{
+    console.log({student_id:req.Student._id});
+    
+
+    AttendenceModel.findOne({student_id:req.Student._id}).populate({path:'courses',select:'course department'})
+    .then(responce=>{
+        console.log(responce);
+        if(responce){
+
+            return res.json({Student:responce})
+        }
+        
+    }).catch(err=>{
+        console.log(err);
+        
+        return res.json({message:err})
+    })
+}
+
+export const EditStudent=(req:UpdatedStudentProps,res:express.Response)=>{
+    const _id=req.params._id
+    StudentModel.findById(_id).populate({path:"courses" ,select:"department course"})
+    .then(responce=>{
+        console.log(responce);
+        if(responce){
+
+            return res.json({Student:responce})
+        }
+        
+    })
+    .catch(err=>{
+        return res.json({message:err})
+    })
 }

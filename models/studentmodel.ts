@@ -1,8 +1,9 @@
 
-import { string } from "joi";
-import mongoose, { Mongoose } from "mongoose";
+
+import mongoose from "mongoose";
 
 const StudentScheme=new mongoose.Schema({
+    
     studentname:{
         type:String,
         require:true

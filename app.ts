@@ -16,6 +16,7 @@ app.use(cors({
 }))
 app.use('/',TeacherRouter)
 app.use('/student',StudentRouter)
+app.use('/studentphoto',express.static('studentphoto'))
 mongoose.connect('mongodb://localhost:27017/ims', (err) => {
     if (err) {
         console.log(err);

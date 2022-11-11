@@ -19,6 +19,8 @@ export const Middlewere = (req: UpdatedTeacherprops, res: express.Response, next
                 if (req.path !== '/signup' && req.path !== '/login') {
                     TeacherModel.findById(decoded._id)
                         .then(responce => {
+                            console.log("responce"+responce);
+                            
                             req.Teacher = responce as unknown as TeacherProps
                             next()
                         })
