@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { useAppDispatch } from "../Redux/hook";
 import { SetInitialStudentState } from "../Redux/studentslice";
 
@@ -75,7 +76,7 @@ const StudentList = () => {
                         <option>select course</option>
                         {courselist.map((list) => {
                           return (
-                            <option value={list._id} className="tw-text-sm tw-font-medium tw-text-gray-900 tw-px-6 tw-py-4 tw-text-left">
+                            <option value={list._id} key={list._id} className="tw-text-sm tw-font-medium tw-text-gray-900 tw-px-6 tw-py-4 tw-text-left">
                               {list.course + "-" + list.department}
                             </option>
                           );
@@ -110,9 +111,11 @@ const StudentList = () => {
                       <td className="tw-text-sm tw-text-gray-900 tw-font-light tw-px-6 tw-py-4 tw-whitespace-nowrap">
                         {list.dob}
                       </td>
-                      <td className="tw-text-sm tw-text-gray-900 tw-font-light tw-px-6 tw-py-4 tw-whitespace-nowrap">
-                        <button>Edit</button>
-                        <button>Delete</button>
+                      <td className="tw-text-sm tw-text-gray-900 tw-font-light tw-px-6 tw-py-4 tw-whitespace-nowrap ">
+                        <div className="tw-space-x-3">
+                        <Link to={'/editstudent/'+list._id} className='tw-bg-blue-500 tw-text-white tw-p-3 tw-rounded-lg' > Edit</Link>
+                        <button className='tw-bg-red-500 tw-text-white tw-p-3 tw-rounded-lg '>Delete</button>
+                        </div>
                       </td>
                     </tr>
                   );

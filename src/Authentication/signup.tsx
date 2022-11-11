@@ -26,7 +26,7 @@ const SignUp = () => {
     }
   return (
     <div className="tw-w-full tw-h-screen tw-bg-slate-300 tw-flex tw-justify-center tw-items-center">
-      <div className="tw-w-3/12 tw-p-6 tw-bg-slate-50 tw-rounded-lg tw-shadow-lg">
+      <div className="lg:tw-w-3/12 sm:tw-w-6/12 tw-p-6 tw-bg-slate-50 tw-rounded-lg tw-shadow-lg">
         <form onSubmit={submithandler}>
           <div className="tw-mt-2">
             <label className="tw-font-outfit tw-text-lg">UserName</label>

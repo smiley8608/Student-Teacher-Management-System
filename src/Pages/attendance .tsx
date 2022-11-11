@@ -198,9 +198,9 @@ const Attendance = () => {
                         {list.courses.course + "-" + list.courses.department}
                       </td>
 
-                      {list.attendence.map((attendancelist) => {
+                      {list.attendence.map((attendancelist,index) => {
                         return (
-                          <td className="tw-text-sm tw-text-gray-900 tw-font-light tw-px-6 tw-py-4 tw-whitespace-nowrap">
+                          <td className="tw-text-sm tw-text-gray-900 tw-font-light tw-px-6 tw-py-4 tw-whitespace-nowrap" key={index}>
                             {attendancelist}
                           </td>
                         );

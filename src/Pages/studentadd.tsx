@@ -110,25 +110,9 @@ const StudentAdd = () => {
                 );
               })}
             </select>
-            {/* <input
-                type={"text"}
-                placeholder="Course"
-                className="tw-w-full tw-p-3 tw-rounded-lg"
-                value={data.course}
-                onChange={(e)=>{setData({...data,course:e.target.value})}}
-              /> */}
+            
           </div>
-          {/* <div className="tw-mt-2">
-              <label className="tw-font-outfit tw-text-lg">Department</label>
-              <br />
-              <input
-                type={"text"}
-                placeholder="Department"
-                className="tw-w-full tw-p-3 tw-rounded-lg"
-                value={data.department}
-                onChange={(e)=>{setData({...data,department:e.target.value})}}
-              />
-            </div> */}
+          
 
           <div className="tw-mt-2">
             <label className="tw-font-outfit tw-text-lg">StudentPhoto</label>

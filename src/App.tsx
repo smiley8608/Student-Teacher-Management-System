@@ -17,13 +17,18 @@ import StudentDeatils from "./studentpages/studentdetails";
 import AttendenceReport from "./studentpages/attendenceReport";
 import LeaveRequest from "./studentpages/leaveRequest";
 import { SetInitialStudentState } from "./Redux/studentslice";
+import LogOut from "./studentpages/logout";
+import { EditStudentDetails } from "./Pages/editstudent";
 
 const App = () => {
   const dispatch = useAppDispatch();
   const TeacherAuth = useAppSelector((state) => state.Teacher.Auth);
   const StudentAuth = useAppSelector((state) => state.Student.Auth);
-  console.log(StudentAuth);
+  const Students=useAppSelector(state=>state.Student.Student)
+  console.log(Students);
   
+  console.log(StudentAuth);
+
   useEffect(() => {
     let Token = localStorage.getItem("jwt-token");
     if (Token) {
@@ -66,6 +71,7 @@ const App = () => {
               <Route path="/studentlist" element={<StudentList />} />
               <Route path="/attendance" element={<Attendance />} />
               <Route path="/leaveapprove" element={<LeaveApprove />} />
+              <Route path="/editstudent/:_id" element={<EditStudentDetails />} />
               <Route path="/signout" element={<SignOut />} />
             </>
           ) : (
@@ -79,6 +85,7 @@ const App = () => {
                     element={<AttendenceReport />}
                   />
                   <Route path="/leaverequest" element={<LeaveRequest />} />
+                  <Route path="/studentlogout" element={<LogOut />} />
                 </>
               ) : (
                 <>

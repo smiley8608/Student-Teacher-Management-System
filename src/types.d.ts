@@ -13,12 +13,15 @@ interface UpdatedTeacherProps {
 
 interface StudentProps {
     _id: string,
-    name: string,
-    course: string,
+    studentname: string,
+    courses: {
+        course:string,
+        department:string
+    },
     subject: string,
     rollno: string,
     dob: string,
-    studentphoto: string
+    path: string
 }
 interface UpdatedStudentProps {
     Student:StudentProps|null,
