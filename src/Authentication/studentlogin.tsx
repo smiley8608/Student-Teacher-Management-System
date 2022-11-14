@@ -1,6 +1,7 @@
 import { DatePicker, message } from "antd";
 import axios from "axios";
 import { FormEvent, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../Redux/hook";
 import { SetInitialStudentState } from "../Redux/studentslice";
 
@@ -8,6 +9,7 @@ const StudentLogin=()=>{
 
     const [data,setData]=useState({rollno:'',password:''})
     const dispatch=useAppDispatch()
+    const navigate=useNavigate()
     const submithandler=(e:FormEvent)=>{
         e.preventDefault()
         console.log(data);
@@ -18,6 +20,8 @@ const StudentLogin=()=>{
             dispatch(SetInitialStudentState({Student:responce.data.Student,Auth:responce.data.Auth}))
             localStorage.setItem('student-token',responce.data.tkn)
             message.success(responce.data.message)
+            navigate('/studentdetail')
+
         })
 
     }

@@ -1,8 +1,9 @@
+import { message } from "antd";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useAppDispatch } from "../Redux/hook";
-import { SetInitialStudentState } from "../Redux/studentslice";
+
+
 
 const StudentList = () => {
   const [courselist, setCourseList] = useState([
@@ -12,7 +13,7 @@ const StudentList = () => {
   const [studentlist, setStudentList] = useState([
     { _id: "", studentname: "", rollno: "", courses: {course:'',department:''}, dob: "" },
   ]);
-  const dispatch = useAppDispatch();
+  
   useEffect(() => {
     axios
       .get("http://localhost:3002/getcourse")
@@ -37,6 +38,14 @@ const StudentList = () => {
          // dispatch(SetInitialStudentState({Student:responce.data.Student,Auth:responce.data.Auth}))
        })
        .catch();
+  }
+  const deleteHandler=(_id:string)=>{
+    axios.post('http://localhost:3002/deletehandler',{_id:_id})
+    .then(responce=>{
+      console.log(responce.data.message );
+      
+      message.success(responce.data.message)
+    })
   }
   return (
     <div className="tw-flex tw-flex-col">
@@ -114,7 +123,7 @@ const StudentList = () => {
                       <td className="tw-text-sm tw-text-gray-900 tw-font-light tw-px-6 tw-py-4 tw-whitespace-nowrap ">
                         <div className="tw-space-x-3">
                         <Link to={'/editstudent/'+list._id} className='tw-bg-blue-500 tw-text-white tw-p-3 tw-rounded-lg' > Edit</Link>
-                        <button className='tw-bg-red-500 tw-text-white tw-p-3 tw-rounded-lg '>Delete</button>
+                        <button className='tw-bg-red-500 tw-text-white tw-p-3 tw-rounded-lg ' onClick={()=>{deleteHandler(list._id)}}>Delete</button>
                         </div>
                       </td>
                     </tr>

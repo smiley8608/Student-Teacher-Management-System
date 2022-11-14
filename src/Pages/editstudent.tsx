@@ -1,4 +1,4 @@
-import { DatePicker } from "antd";
+import { DatePicker, message } from "antd";
 import axios from "axios";
 import { FormEvent, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -12,8 +12,9 @@ export const EditStudentDetails = () => {
   const [courselist, setCourseList] = useState<any>([]);
   const { _id } = useParams();
   console.log(_id);
-  const dispatch = useAppDispatch();
-  const Student = useAppSelector((state) => state.Student.Student);
+  const [student,setStudent]=useState<any>({id:""})
+  // const dispatch = useAppDispatch();
+  // const Student = useAppSelector((state) => state.Student.Student);
 
   useEffect(() => {
     axios.get("http://localhost:3002/getcourse").then((responce) => {
@@ -23,22 +24,22 @@ export const EditStudentDetails = () => {
 
     axios.get(`http://localhost:3002/editstudent/${_id}`).then((responce) => {
       console.log(responce.data);
-      dispatch(
-        SetInitialStudentState({ Student: responce.data.Student, Auth: true })
-      );
+      // dispatch(
+      //   SetInitialStudentState({ Student: responce.data.Student, Auth: true })
+      // );
+      setStudent(responce.data.Student)
     });
-    
-    
-
-    
-    
-  }, [_id, dispatch]);
-  console.log(data);
+   
+    console.log("id"+student._id); 
+  }, [_id,student._id]);
+  console.log(student);
   const submithandler=(e:FormEvent)=>{
     e.preventDefault()
-    axios.post('http://localhost:3002/updatestudent',{data:data})
+    
+    axios.post('http://localhost:3002/updatestudent',{student:student})
     .then(responce=>{
         console.log(responce.data.message);
+        message.success(responce.data.message)
         
     }).catch()
 
@@ -58,9 +59,9 @@ export const EditStudentDetails = () => {
               type={"text"}
               placeholder="studentname"
               className="tw-w-full tw-p-3 tw-rounded-lg"
-              value={Student?.studentname}
+              defaultValue={student.studentname}
               onChange={(e)=>{
-                setData({...data,studentname:e.target.value})
+                setStudent({...student,studentname:e.target.value})
               }}
             />
           </div>
@@ -71,25 +72,25 @@ export const EditStudentDetails = () => {
               type={"text"}
               placeholder="rollno"
               className="tw-w-full tw-p-3 tw-rounded-lg"
-              value={Student?.rollno}
+              defaultValue={student.rollno}
               onChange={(e)=>{
-                setData({...data,rollno:e.target.value})
+                setStudent({...student,rollno:e.target.value})
               }}
             />
           </div>
           <div className="tw-mt-2">
             <label className="tw-font-outfit tw-text-lg">DateOfBirth</label>
             <br />
-            {Student?.dob && <DatePicker format={"DD:MM:YYYY"}
+            {student?.dob && <DatePicker format={"DD/MM/YYYY"}
             onChange={(e)=>{
-                setData({...data,dob:e?.format("DD:MM:YYYY")})
+                setStudent({...student,dob:e?.format("DD/MM/YYYY")})
             }}/>}
           </div>
 
           <div className="tw-mt-2">
             <label className="tw-font-outfit tw-text-lg">Course</label>
             <br />
-            <select onChange={(e)=>{setData({...data,courses:e.target.value})}}>
+            <select onChange={(e)=>{setStudent({...student,courses:e.target.value})}} >
               <option>select course</option>
               {courselist.map((list: any) => {
                 return (
@@ -110,7 +111,7 @@ export const EditStudentDetails = () => {
               className="tw-w-full tw-p-3 tw-rounded-lg"
               multiple={true}
               onChange={(e: any) => {
-                setData({ ...data, studentphoto: e.target.files[0] });
+                setStudent({ ...student, studentphoto: e.target.files[0] });
               }}
             />
           </div>

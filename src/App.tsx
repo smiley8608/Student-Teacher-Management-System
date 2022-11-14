@@ -78,7 +78,7 @@ const App = () => {
             <>
               {StudentAuth ? (
                 <>
-                  {" "}
+                 
                   <Route path="/studentdetail" element={<StudentDeatils />} />
                   <Route
                     path="/attendencereport"

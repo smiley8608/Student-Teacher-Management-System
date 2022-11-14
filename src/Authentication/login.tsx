@@ -1,14 +1,16 @@
 import { message } from "antd";
 import axios from "axios";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../Redux/hook";
 import { SetInitialState } from "../Redux/teacherslice";
 
 const LogIn = () => {
   const [data, setData] = useState({ email: "", password: "" });
+  
   const navigate=useNavigate()
   const dispatch=useAppDispatch()
+ 
   const submithandler=(e:FormEvent)=>{
     e.preventDefault()
     axios.post('http://localhost:3002/login',{data:data})
