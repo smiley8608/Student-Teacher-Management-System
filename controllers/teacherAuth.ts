@@ -5,19 +5,22 @@ import TeacherModel from '../models/teachermodel'
 import { UpdatedTeacherprops } from '../type'
 import Jwt from 'jsonwebtoken'
 import dotenv = require('dotenv')
-import { isJSDocUnknownTag } from 'typescript'
+import LeaveModel from '../models/leaveModel'
+
 dotenv.config()
 const teacherschema = Joi.object({
     username: Joi.string().alphanum().max(30).required(),
-    department: Joi.string().required(),
+    courses: Joi.string().required(),
     email: Joi.string().email().required(),
     password: Joi.string().max(15).pattern(new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{7,30}$")).required()
 })
 
 export const TeacherRegister = (req:express.Request, res: express.Response) => {
-    const { username, department, email, password } = req.body.data
+    const { username, courses, email, password } = req.body.data
+    console.log(req.body.data);
+    
 
-    teacherschema.validateAsync({ username, department, email, password })
+    teacherschema.validateAsync({ username, courses, email, password })
         .then(validate => {
             TeacherModel.find({ email: email })
                 .then(emailarray => {
@@ -26,12 +29,12 @@ export const TeacherRegister = (req:express.Request, res: express.Response) => {
                     } else {
                         bcrypt.hash(password, 10)
                             .then(hassedpassed => {
-                                TeacherModel.create({ username, department, email, password: hassedpassed })
+                                TeacherModel.create({ username, courses, email, password: hassedpassed })
                                     .then(result => {
 
                                         if (process.env.TOKEN_SECURT) {
                                             let token = Jwt.sign({ _id: result.id }, process.env.TOKEN_SECURT)
-                                            return res.json({ message: 'Account Created successfully', Teacher: result, Auth: true, tkn: token })
+                                            return res.json({ message:'Account Created successfully', Teacher: result, Auth: true, tkn: token })
                                         }
                                     })
                                     .catch(err => {
@@ -93,4 +96,21 @@ export const TeacherLogin = (req:express.Request, res: express.Response) => {
 
 export const AuthStatus=(req:UpdatedTeacherprops,res:express.Response)=>{
     return res.json({Teacher:req.Teacher,Auth:true})
+}
+
+
+export const LeaveResponce=(req:UpdatedTeacherprops,res:express.Response)=>{
+    console.log(req.Teacher);
+    const Teacher=req.Teacher
+    LeaveModel.find({courses:Teacher.courses as string}).populate([{path:'courses',select:'course department'},{path:'student_id',select:'studentname rollno'}])
+    .then(LeaveObject=>{
+        console.log(LeaveObject);
+        
+        if(LeaveObject.length<1){
+            return res.json({message:'No Leave Request'})
+        }else{
+            return res.json({Student:LeaveObject})
+        }
+    })
+    
 }

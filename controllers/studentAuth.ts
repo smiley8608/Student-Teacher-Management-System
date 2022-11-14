@@ -20,7 +20,7 @@ const studentSchema = Joi.object({
     dob: Joi.string().required()
 })
 
-export const StudentRegister = (req:UpdatedStudentProps, res: express.Response) => {
+export const StudentRegister = (req: UpdatedStudentProps, res: express.Response) => {
     const { studentname, rollno, courses, dob } = req.body
     const date = new Date()
     const month = date.getMonth() + 1
@@ -46,9 +46,9 @@ export const StudentRegister = (req:UpdatedStudentProps, res: express.Response) 
                                                     console.log("result" + result);
                                                     console.log("finalresult" + finalresult);
                                                     if (process.env.STD_SECURT) {
-                                                        let Token = Jwt.sign({_id:result._id}, process.env.STD_SECURT)
+                                                        let Token = Jwt.sign({ _id: result._id }, process.env.STD_SECURT)
                                                         if (result && finalresult) {
-                                                            return res.json({ message: 'Student Account created!', Student: result, Auth: true,tkn:Token })
+                                                            return res.json({ message: 'Student Account created!', Student: result, Auth: true, tkn: Token })
                                                         } else {
                                                             return res.json({ message: 'unable to create student account' })
                                                         }
@@ -140,7 +140,7 @@ export const StudentLogin = (req: express.Request, res: express.Response) => {
                                     return res.json({ message: 'please check the password' })
                                 } else {
                                     if (process.env.STD_SECURT) {
-                                        let token = Jwt.sign({_id:studentobject._id}, process.env.STD_SECURT)
+                                        let token = Jwt.sign({ _id: studentobject._id }, process.env.STD_SECURT)
                                         return res.json({ message: 'Account Login Successfully!', Student: studentobject, Auth: true, tkn: token })
                                     }
                                 }
@@ -165,48 +165,102 @@ export const StudentAuth = (req: UpdatedStudentProps, res: express.Response) => 
 
     return res.json({ Student: req.Student, Auth: true })
 }
-export const StudentDetails=(req:UpdatedStudentProps,res:express.Response)=>{
-    StudentModel.findById({_id:req.Student._id}).populate({path:'courses',select:'course department'})
-    .then(responce=>{
-        
-        if(responce){
-            return res.json({Student:responce})
-        }
-        
-    }).catch(err=>{
-        return res.json({message:err})
-    })
+export const StudentDetails = (req: UpdatedStudentProps, res: express.Response) => {
+    StudentModel.findById({ _id: req.Student._id }).populate({ path: 'courses', select: 'course department' })
+        .then(responce => {
+
+            if (responce) {
+                return res.json({ Student: responce })
+            }
+
+        }).catch(err => {
+            return res.json({ message: err })
+        })
 }
 
-export const StudentAttdence=(req:UpdatedAttendenceProps,res:express.Response)=>{
-    console.log({student_id:req.Student._id});
-    
+export const StudentAttdence = (req: UpdatedAttendenceProps, res: express.Response) => {
+    console.log({ student_id: req.Student._id });
 
-    AttendenceModel.findOne({student_id:req.Student._id}).populate({path:'courses',select:'course department'})
-    .then(responce=>{
-        console.log(responce);
-        if(responce){
 
-            return res.json({Student:responce})
-        }
-        
-    }).catch(err=>{
-        console.log(err);
-        
-        return res.json({message:err})
-    })
+    AttendenceModel.findOne({ student_id: req.Student._id }).populate({ path: 'courses', select: 'course department' })
+        .then(responce => {
+            console.log(responce);
+            if (responce) {
+
+                return res.json({ Student: responce })
+            }
+
+        }).catch(err => {
+            console.log(err);
+
+            return res.json({ message: err })
+        })
 }
 
-export const EditStudent=(req:UpdatedStudentProps,res:express.Response)=>{
-    const _id=req.params._id
-    StudentModel.findById(_id).populate({path:"courses" ,select:"department course"})
-    .then(responce=>{
-        console.log(responce);
-        if(responce){
+export const EditStudent = (req: UpdatedStudentProps, res: express.Response) => {
+    const _id = req.params._id
+    StudentModel.findById(_id).populate({ path: "courses", select: "department course" })
+        .then(responce => {
+            console.log(responce);
+            if (responce) {
 
-            return res.json({Student:responce})
-        }
-        
+                return res.json({ Student: responce })
+            }
+
+        })
+        .catch(err => {
+            return res.json({ message: err })
+        })
+}
+
+
+export const UpdateStudent = (req: express.Request, res: express.Response) => {
+    const  student  = req.body.student
+    console.log(req.body.student);
+    StudentModel.find({ courses: student.courses })
+        .then(courseArray => {
+            console.log(courseArray);
+
+            if (courseArray.length <= 0) {
+                return res.json({ message: 'This Course are not exists,Please check course input ' })
+            } else {
+                StudentModel.findOne({ rollno: student.rollno })
+                    .then(studentObject => {
+                        if (studentObject) {
+                            return res.json({ message: 'This RollNo already exists !' })
+                        } else {
+                            StudentModel.findByIdAndUpdate({ _id: student._id }, student)
+                                .then(result => {
+                                    if (!result) {
+                                        return res.json({ message: 'unable to updated ,pls try again later' })
+                                    } else {
+                                        return res.json({ message: 'Student Profile updated successfully!' })
+                                    }
+                                })
+                                .catch(err=>{
+                                    return res.json({message:err})
+                                })
+
+
+                        }
+                    })
+                    .catch(err=>{
+                        return res.json({message:err})
+                    })
+
+
+            }
+        })
+        .catch(err=>{
+            return res.json({message:err})
+        })
+}
+
+export const DeleteHandler=(req:express.Request,res:express.Response)=>{
+    const _id=req.body._id
+    StudentModel.findByIdAndRemove({_id:_id})
+    .then(result=>{
+        return res.json({message:'Student Deleted Successfully!'})
     })
     .catch(err=>{
         return res.json({message:err})

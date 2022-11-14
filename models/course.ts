@@ -4,10 +4,10 @@ import mongoose from "mongoose";
 const courseSchema=new mongoose.Schema({
     course:{
         type:String,
-        require:true
+        required:true
     },department:{
         type:String,
-        require:true
+        required:true
     }
 })
 

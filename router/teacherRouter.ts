@@ -30,4 +30,7 @@ TeacherRouter.post('/studentlist',Middlewere,StudentControll.StudentList)
 TeacherRouter.post('/getattendence',Middlewere,AttendenceControll.GetAttandence)
 TeacherRouter.post('/updateattendence',Middlewere,AttendenceControll.UpdateAttendence)
 TeacherRouter.get('/editstudent/:_id',Middlewere,StudentControll.EditStudent)
+TeacherRouter.post('/updatestudent',Middlewere,StudentControll.UpdateStudent)
+TeacherRouter.post('/deletehandler',Middlewere,StudentControll.DeleteHandler)
+TeacherRouter.get('/leaveresponce',Middlewere,TeacherControll.LeaveResponce)
 export default TeacherRouter 

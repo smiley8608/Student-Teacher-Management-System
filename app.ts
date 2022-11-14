@@ -5,6 +5,7 @@ import bodyParser=require('body-parser')
 import cors from 'cors'
 import TeacherRouter from './router/teacherRouter'
 import StudentRouter from './router/studentrouter'
+import morgan from "morgan"
 
 const app = express()
 app.use(express.json())
@@ -17,6 +18,7 @@ app.use(cors({
 app.use('/',TeacherRouter)
 app.use('/student',StudentRouter)
 app.use('/studentphoto',express.static('studentphoto'))
+app.use(morgan("dev"))
 mongoose.connect('mongodb://localhost:27017/ims', (err) => {
     if (err) {
         console.log(err);

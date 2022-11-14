@@ -6,25 +6,25 @@ const StudentScheme=new mongoose.Schema({
     
     studentname:{
         type:String,
-        require:true
+        required:true
     },rollno:{
         type:String,
-        require:true
+        required:true
     },courses:{
         type:mongoose.Types.ObjectId,
-        require:true,
+        required:true,
         ref:'courses'
     },dob:{
         type:String,
-        require:true
+        required:true
     },path:{
         type:String,
-        require:true
+        required:true
     },password:{
         type:String,
-        require:true
+        required:true
     }
 })
-const StudentModel=mongoose.model('Student',StudentScheme)
+const StudentModel=mongoose.model('student',StudentScheme)
 
 export default StudentModel

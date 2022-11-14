@@ -4,26 +4,26 @@ import mongoose from "mongoose";
 const attendenceSchema=new mongoose.Schema({
     rollno:{
         type:String,
-        require:true
+        required:true
     },studentname:{
         type:String,
-        require:true
+        required:true
     },attendence:{
         type:Array,
-        require:true
+        required:true
     },month:{
         type:String,
-        require:true
+        required:true
     },year:{
         type:String,
-        require:true
+        required:true
     },student_id:{
         type:mongoose.Types.ObjectId,
-        require:true,
+        required:true,
         ref:'students'
     },courses:{
         type:mongoose.Types.ObjectId,
-        require:true,
+        required:true,
         ref:'courses'
     }
 })

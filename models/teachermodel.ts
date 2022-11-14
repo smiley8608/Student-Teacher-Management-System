@@ -5,10 +5,12 @@ const TeacherSchema=new mongoose.Schema({
     username:{
         type:String,
         require:true
-    },department:{
-        type:String,
-        require:true
-    },email:{
+    },courses:{
+        type:mongoose.Types.ObjectId,
+        require:true,
+        ref:'courses'
+    }
+    ,email:{
         type:String,
         require:true
     },password:{

@@ -3,7 +3,7 @@ import express = require('express')
 
 export interface TeacherProps {
     username:string,
-    department:string,
+    courses:string,
     email:string,
     password:string
 }
